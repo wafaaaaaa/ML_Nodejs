@@ -24,26 +24,57 @@ router.post(
 
 router.post("/resetdata", upload.single("add_collabs_file"), (req, res) => {
   const childPython = require("child_process").spawn(process.env.python, [
-    "test.py",
+    "Prediction_semaine.py",
     req.body.nom,
   ]);
 
  console.log('params')
 
-  childPython.stdout.on("data", (data) => {
-    console.log(`${data}`);
-    //console.log(`${df}`)
-    res.send(`${data}`);
-    //res.send(data);
-  });
+ var dataToSend;
+ childPython.stdout.on("data", function (data) {
+   dataToSend = `${data}`;
+   console.log(dataToSend);
+   res.send(dataToSend);
+ });
 
-  childPython.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-  });
+ childPython.on("close", (code) => {
+   // res.send(dataToSend);
+ })
 
+   childPython.stderr.on("data", (data) => {
+    //console.error(`stderr: ${data}`);
+  });
+ 
   // childPython.on("close", (code) => {
   //   console.log(`child process exited with code ${code}`);
   // });
 });
 
+router.post("/resetdatamois", upload.single("add_collabs_file"), (req, res) => {
+  const childPython = require("child_process").spawn(process.env.python, [
+    "Prediction_mois.py",
+    req.body.nom,
+  ]);
+
+ console.log('params')
+
+ var dataToSend;
+ childPython.stdout.on("data", function (data) {
+   dataToSend = `${data}`;
+   console.log(dataToSend);
+   res.send(dataToSend);
+ });
+
+ childPython.on("close", (code) => {
+   // res.send(dataToSend);
+ })
+
+   childPython.stderr.on("data", (data) => {
+    //console.error(`stderr: ${data}`);
+  });
+ 
+  // childPython.on("close", (code) => {
+  //   console.log(`child process exited with code ${code}`);
+  // });
+});
 module.exports = router;

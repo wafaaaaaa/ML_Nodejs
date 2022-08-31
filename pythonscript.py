@@ -17,8 +17,8 @@ destination = os.environ.get("destinationimportcollab")
 
 with open(destination + '\\' + sys.argv[1], "r",encoding="ISO-8859-1") as file_obj:
  data = pd.read_csv(file_obj, skipinitialspace = True,on_bad_lines='skip',sep=';')
-#file_data["test"]=1
 
+#rename column index 0
 data.columns.values[0] = "document_number"
 
 # Data Cleaning
@@ -72,15 +72,10 @@ DataFrame=pd.merge(DataFrame,df5, left_index=True, right_index=True)
 DataFrame.drop(DataFrame.loc[DataFrame['unit']=='m'].index, inplace=True)
 DataFrame.drop(DataFrame.loc[DataFrame['unit']=='kg'].index, inplace=True)
 
-#Regroupement par semaine
-
-#La somme des pics vendus durant la semaine qui commence le Lundi indiqué (shipping_date)
-
-DataFrame['shipping_date'] = pd.to_datetime(DataFrame['shipping_date']) - pd.to_timedelta(6, unit='d')
-DataFrame=DataFrame.resample('W-MON', on='shipping_date').pics_number.sum()
-DataFrame= pd.DataFrame(data=DataFrame)
-
-DataFrame.drop(DataFrame[DataFrame['pics_number'] == 0].index, inplace = True)
+#print('11111111111')
+#print(DataFrame.info())
 
 
-ax = sns.boxplot(x=DataFrame["pics_number"])
+##########################################
+
+
